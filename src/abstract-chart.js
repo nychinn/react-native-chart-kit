@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { LinearGradient, Line, Text, Defs, Stop } from "react-native-svg";
+import TooltipDecorator from './chart-decorators/tooltip'
 
 class AbstractChart extends Component {
   /**
@@ -304,12 +305,12 @@ class AbstractChart extends Component {
 
   renderTooltipElement() {
     const {
-            tooltipVisible,
-            tooltipTextX,
-            tooltipTextY,
-            tooltipTargetIndex,
-            tooltipTargetValue,
-          } = this.state;
+      tooltipVisible,
+      tooltipTextX,
+      tooltipTextY,
+      tooltipTargetIndex,
+      tooltipTargetValue,
+    } = this.state;
     const { height } = this.props;
 
     return (
