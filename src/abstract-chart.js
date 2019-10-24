@@ -3,6 +3,12 @@ import React, { Component } from "react";
 import { LinearGradient, Line, Text, Defs, Stop } from "react-native-svg";
 
 class AbstractChart extends Component {
+  /**
+    * For tooltip position calculation
+    */
+  cx = 0;
+  cy = 0;
+
   calcScaler = data => {
     if (this.props.fromZero) {
       return Math.max(...data, 0) - Math.min(...data, 0) || 1;
@@ -271,14 +277,39 @@ class AbstractChart extends Component {
     );
   };
 
+  renderTooltip({ value, dataset, getColor }) {
+    return this.props.renderTooltip
+      ? this.props.renderTooltip({ value, dataset, getColor })
+      : null;
+  }
+
+  showDataPointTooltip({ index, value, cx, cy, dataset, getColor }) {
+    this.cx = cx;
+    this.cy = cy;
+  }
+
+  hideAllTooltip() {
+    this.setState({
+      tooltipVisible: false,
+    })
+  }
+
+  calCx(index) {
+    return this.cx;
+  }
+
+  calCy(value) {
+    return this.cy;
+  }
+
   renderTooltipElement() {
     const {
-      tooltipVisible,
-      tooltipTextX,
-      tooltipTextY,
-      tooltipTargetIndex,
-      tooltipTargetValue,
-    } = this.state;
+            tooltipVisible,
+            tooltipTextX,
+            tooltipTextY,
+            tooltipTargetIndex,
+            tooltipTargetValue,
+          } = this.state;
     const { height } = this.props;
 
     return (

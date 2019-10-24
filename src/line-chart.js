@@ -12,6 +12,37 @@ import {
 import AbstractChart from "./abstract-chart";
 
 class LineChart extends AbstractChart {
+  static props = {
+    yAxisLabelVisible: propTypes.bool,
+    renderTooltip: propTypes.func,
+    // getTooltipTextX: propTypes.func, // (index, value, dataset) => text
+    // getTooltipTextY: propTypes.func, // (index, value, dataset) => text
+    // onChartClick: propTypes.func, // (x, y) => {}
+  };
+
+  state = {
+    tooltipVisible: false,
+    tooltipTextX: '',
+    tooltipTextY: '',
+    tooltipTargetIndex: 0,
+    tooltipTargetValue: 0,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.getDatasMemoize = memoize(this.getDatas.bind(this))
+    // this.getDatasMemoize = (data) => this.getDatas(data);
+
+    /**
+     * NOTE: This support only 1 lines
+     * Have been sorted by `cx` props already
+     */
+    this.dataPoints = [
+      // [index]: { index, value, cx, cy }
+    ];
+  }
+  
   getColor = (dataset, opacity) => {
     return (dataset.color || this.props.chartConfig.color)(opacity);
   };
@@ -364,6 +395,19 @@ class LineChart extends AbstractChart {
         </Svg>
       </View>
     );
+  }
+
+  showDataPointTooltip({ indexY, value, cx, cy, dataset, getColor }) {
+    super.showDataPointTooltip({ index: indexY, value, cx, cy, dataset, getColor });
+
+    const { getTooltipTextX, getTooltipTextY } = this.props;
+    this.setState({
+      tooltipVisible: true,
+      tooltipTextX: getTooltipTextX ? getTooltipTextX(indexY, value, dataset) : '' + value,
+      tooltipTextY: getTooltipTextY ? getTooltipTextY(indexY, value, dataset) : '' + value,
+      tooltipTargetIndex: indexY,
+      tooltipTargetValue: value,
+    })
   }
 }
 
