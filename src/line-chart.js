@@ -357,6 +357,9 @@ class LineChart extends AbstractChart {
                   paddingRight
                 })}
             </G>
+            <G>
+              {this.renderTooltipElement()}
+            </G>
           </G>
         </Svg>
       </View>

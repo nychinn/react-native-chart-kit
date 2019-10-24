@@ -270,6 +270,32 @@ class AbstractChart extends Component {
       </Defs>
     );
   };
+
+  renderTooltipElement() {
+    const {
+      tooltipVisible,
+      tooltipTextX,
+      tooltipTextY,
+      tooltipTargetIndex,
+      tooltipTargetValue,
+    } = this.state;
+    const { height } = this.props;
+
+    return (
+      <TooltipDecorator
+        visible={tooltipVisible}
+        textX={tooltipTextX}
+        textY={tooltipTextY}
+        index={tooltipTargetIndex}
+        value={tooltipTargetValue}
+        x={(index) => this.calCx(index)} // x(index) => x tooltip
+        y={(value) => this.calCy(value)} // y(value) => y value
+        chartHeight={height}
+        stroke={'#00ccff'}
+        pointStroke={'#00ccff'}
+      />
+    )
+  }
 }
 
 export default AbstractChart;
