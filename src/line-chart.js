@@ -1,5 +1,7 @@
 import React from "react";
+import propTypes from 'prop-types'
 import { View } from "react-native";
+import memoize from "lodash.memoize";
 import {
   Svg,
   Circle,
@@ -41,6 +43,27 @@ class LineChart extends AbstractChart {
     this.dataPoints = [
       // [index]: { index, value, cx, cy }
     ];
+  }
+
+  componentDidMount() {
+    this.onRendered({});
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.onRendered(prevProps);
+  }
+
+  onRendered(prevProps) {
+    // console.log('onRendered line');
+    const { data } = this.props;
+    if (
+      prevProps.data !== data &&
+      data.datasets[0] &&
+      data.datasets[0].data &&
+      data.datasets[0].data.length > 0
+    ) {
+      this.props.onRendered && this.props.onRendered();
+    }
   }
   
   getColor = (dataset, opacity) => {
